@@ -4,12 +4,15 @@ import superjson from "superjson";
 
 import { exampleRouter } from "./example";
 import { protectedExampleRouter } from "./protected-example-router";
-import { z } from "zod";
+import { protectedPostsRouter } from "./posts";
+import { protectedMediaRouter } from "./photo";
 
 export const appRouter = createRouter()
   .transformer(superjson)
   .merge("example.", exampleRouter)
-  .merge("auth.", protectedExampleRouter);
+  .merge("auth.", protectedExampleRouter)
+  .merge("draft.", protectedPostsRouter)
+  .merge("media.", protectedMediaRouter);
   // .mutation("signedPutLink", {
   //   input: z.object({
   //     fileNames: z.array(z.string()),
