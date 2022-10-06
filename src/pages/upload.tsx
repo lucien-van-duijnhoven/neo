@@ -6,7 +6,6 @@ const Upload = function () {
     const [files, setFiles] = useState<File[]>([]);
 
     const handleSend = function () {
-        // TODO: Fix pyramid of doom
         (new Array(...files)).forEach((file) => {
             console.log(file);
             fetch(`/api/signedPutLink?name=${file.name}`).then((res) => {

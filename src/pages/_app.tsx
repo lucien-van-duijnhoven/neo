@@ -6,8 +6,8 @@ import { SessionProvider } from "next-auth/react";
 import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import type { AppRouter } from "../server/router";
-import "../styles/globals.css";
-import "../styles/globals.sass";
+import "../styles/carbon.sass";
+import "../styles/tailwind.css";
 
 const MyApp: AppType = ({
   Component,

@@ -35,21 +35,6 @@ export const protectedPostsRouter = createProtectedRouter()
             }
         }
     })
-    .query("getPhotos", {
-        input: z.object({
-            postId: z.string(),
-        }),
-        async resolve({ input, ctx }) {
-            return await ctx.prisma.post.findFirst({
-                where: {
-                    id: input.postId,
-                },
-                select: {
-                    photo: true,
-                }
-            });
-        }
-    })
     .mutation("new", {
         async resolve({ ctx }) {
             return await ctx.prisma.post.create({
@@ -62,6 +47,52 @@ export const protectedPostsRouter = createProtectedRouter()
                 },
                 select: {
                     id: true,
+                }
+            });
+        }
+    })
+    .query("configUrl", {
+        input: z.object({
+            postId: z.string(),
+        }),
+        async resolve({ input, ctx }) {
+            return await ctx.prisma.post.findFirst({
+                where: {
+                    id: input.postId,
+                },
+                select: {
+                    configUrl: true,
+                }
+            });
+        }
+    })
+    .query("getTitle", {
+        input: z.object({
+            postId: z.string(),
+        }),
+        async resolve({ input, ctx }) {
+            return await ctx.prisma.post.findFirst({
+                where: {
+                    id: input.postId,
+                },
+                select: {
+                    title: true,
+                }
+            });
+        }
+    })
+    .mutation("setTitle", {
+        input: z.object({
+            postId: z.string(),
+            title: z.string(),
+        }),
+        async resolve({ input, ctx }) {
+            return await ctx.prisma.post.update({
+                where: {
+                    id: input.postId,
+                },
+                data: {
+                    title: input.title,
                 }
             });
         }
