@@ -2,20 +2,17 @@
 import { createRouter } from "./context";
 import superjson from "superjson";
 
-import { exampleRouter } from "./example";
-import { protectedExampleRouter } from "./protected-example-router";
 import { protectedPostsRouter } from "./posts";
 import { protectedMediaRouter } from "./media";
 import { protectedPhotosRouter } from "./photos";
+import { postRouter } from "./post";
 
-// TODO: organize routes but keep the merges here
 export const appRouter = createRouter()
   .transformer(superjson)
-  .merge("example.", exampleRouter)
-  .merge("auth.", protectedExampleRouter)
-  .merge("draft.", protectedPostsRouter)
-  .merge("media.", protectedMediaRouter)
-  .merge("photo." , protectedPhotosRouter);
+  .merge("post.draft.", protectedPostsRouter)
+  .merge("post.bucket.", protectedMediaRouter)
+  .merge("post.draft.photo.", protectedPhotosRouter)
+  .merge("post.", postRouter);
   // .mutation("signedPutLink", {
   //   input: z.object({
   //     fileNames: z.array(z.string()),

@@ -18,6 +18,9 @@ export const protectedPhotosRouter = createProtectedRouter()
                             url: true,
                             name: true,
                             deleted: true,
+                        },
+                        where: {
+                            visibility: true,
                         }
                     },
                 }
