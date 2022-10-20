@@ -1,6 +1,5 @@
 import { createRouter } from "./context";
 import { z } from "zod";
-
 export const postRouter = createRouter()
     .query("getPost", {
         input: z.object({
@@ -24,7 +23,7 @@ export const postRouter = createRouter()
     })
     .query("getPostsList", {
         async resolve({ ctx }) {
-            return await ctx.prisma.post.findMany({
+            return ctx.prisma.post.findMany({
                 where: {
                     isPublic: true,
                 },
@@ -36,7 +35,13 @@ export const postRouter = createRouter()
                             url: true,
                         },
                         take: 1,
-                    }
+                    },
+                    updatedAt: true,
+                    user: {
+                        select: {
+                            name: true,
+                        },
+                    },
                 }
             })
         }

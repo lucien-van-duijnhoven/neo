@@ -1,0 +1,1 @@
+// TODO: 1. make nav 2. let nav disapear when scolling down 3. make nav appear when scrolling up

@@ -3,6 +3,8 @@ interface IProps {
     url: string;
 }
 
+// TODO: abstract card from home page
+
 function Card(props: IProps, childern: any) {
     return (
         <div className="flex flex-col items-center w-full p-2 m-2 align-middle shadow-lg sm:w-80 rounded-xl hover:cursor-pointer">
