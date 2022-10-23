@@ -21,13 +21,13 @@ function Post() {
       <div className="sticky top-0 flex w-full flex-row flex-wrap">
         <button
           onClick={() => Router.push("/")}
-          className="cursor-pointer bg-gray-300 p-2 truncate"
+          className="cursor-pointer truncate bg-gray-300 p-2"
         >
           Go back
         </button>
         {post?.postOfUser ? (
           <button
-            className="grow cursor-pointer bg-emerald-300 p-2 truncate"
+            className="grow cursor-pointer truncate bg-emerald-300 p-2"
             onClick={handleEditPost}
           >
             edit
@@ -35,7 +35,7 @@ function Post() {
         ) : null}
         {post?.prismaData?.configUrl ? (
           <a
-            className="grow flex place-content-center cursor-pointer bg-blue-300 p-2 truncate"
+            className="flex grow cursor-pointer place-content-center truncate bg-blue-300 p-2"
             href={post?.prismaData?.configUrl}
             download
           >
@@ -43,9 +43,9 @@ function Post() {
           </a>
         ) : null}
       </div>
-      <div className="m-2 container place-self-center p-3">
+      <div className="container m-2 place-self-center p-3">
         <h1 className="truncate text-6xl">{post?.prismaData?.title}</h1>
-        <hr className="border bg-black border-solid pt-1 m-2" />
+        <hr className="m-2 border border-solid bg-black pt-1" />
         <div
           dangerouslySetInnerHTML={{
             __html: marked(post?.prismaData?.article ?? ""),

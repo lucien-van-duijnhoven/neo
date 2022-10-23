@@ -2,14 +2,14 @@
 import { createRouter } from "./context";
 import superjson from "superjson";
 
-import { protectedPostsRouter } from "./posts";
+import { protectedDraftsRouter } from "./drafts";
 import { protectedMediaRouter } from "./media";
 import { protectedPhotosRouter } from "./photos";
 import { postRouter } from "./post";
 
 export const appRouter = createRouter()
   .transformer(superjson)
-  .merge("post.draft.", protectedPostsRouter)
+  .merge("post.draft.", protectedDraftsRouter)
   .merge("post.bucket.", protectedMediaRouter)
   .merge("post.draft.photo.", protectedPhotosRouter)
   .merge("post.", postRouter);

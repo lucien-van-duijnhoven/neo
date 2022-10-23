@@ -27,10 +27,8 @@ enum EditorStates {
 }
 
 export default function Upload() {
-  // TODO: Set tumbnail image
-
   // check if the user is logged in
-  const {status: session} = useSession()
+  const { status: session } = useSession();
   if (session === "unauthenticated") {
     Router.push("/api/auth/signin");
   }
@@ -38,7 +36,10 @@ export default function Upload() {
   const router = useRouter();
   const { id } = router.query;
 
-  const {status} = trpc.useQuery(["post.draft.HasDraft", { postId: String(id) }]);
+  const { status } = trpc.useQuery([
+    "post.draft.HasDraft",
+    { postId: String(id) },
+  ]);
 
   const mutateSingedPutLinkConfig = trpc.useMutation(
     "post.bucket.getSignedGetLinkConfig"
@@ -216,13 +217,6 @@ export default function Upload() {
     );
   }
   // Private end
-
-  // TODO: Loading effect
-  const isLoading: boolean = mutateTitle.isLoading || mutateArticle.isLoading;
-
-  useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading]);
 
   if (status === "loading") {
     return <div>Loading...</div>;

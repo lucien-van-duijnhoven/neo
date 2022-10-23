@@ -5,7 +5,7 @@ import { trpc } from "../utils/trpc";
 import { Button } from "@carbon/react";
 import { getSession, useSession } from "next-auth/react";
 import Router from "next/router";
-import { Modal } from "../components";
+import { Modal, Nav } from "../components";
 
 const Home: NextPage = () => {
   const { status, data } = useSession();
@@ -97,6 +97,10 @@ const Home: NextPage = () => {
     });
   }
 
+  function handleLogin() {
+    Router.push("/api/auth/signin");
+  }
+
   return (
     <>
       <Head>
@@ -129,9 +133,11 @@ const Home: NextPage = () => {
           </button>
         </div>
       </Modal>
+
       <main className="grid grid-cols-1 gap-3">
+        <Nav />
         <section className="flex w-full flex-col">
-          {drafts.data ? (
+          {status === "authenticated" ? (
             <>
               <div className="flex w-fit gap-2 place-self-center truncate text-3xl">
                 Open Drafts
@@ -145,13 +151,17 @@ const Home: NextPage = () => {
               <div className="flex w-full flex-wrap place-content-center">
                 {drafts.data?.map((draft) => (
                   <div
-                    onClick={() => handleDraftClick(draft.id)}
+                    onClick={() => {
+                      console.info(draft.id);
+                      handleDraftClick(draft.id);
+                    }}
                     key={draft.id}
                     className="m-2 flex w-full flex-col items-center rounded-xl p-2 align-middle shadow-lg hover:cursor-pointer sm:w-80"
                   >
                     <img
                       onClick={(e) => {
                         e.stopPropagation();
+                        console.info(draft.id);
                         handleDeleteDraft(draft.id);
                       }}
                       src="https://cdn.svgapi.com/vector/109800/close.svg"
@@ -174,6 +184,7 @@ const Home: NextPage = () => {
         </section>
         <section className="flex w-full flex-col">
           <h1 className="w-fit place-self-center truncate text-3xl">Configs</h1>
+
           <div className="flex w-full flex-wrap place-content-center">
             {postListQuery.data?.map((post) => (
               <div

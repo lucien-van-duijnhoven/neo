@@ -1,8 +1,8 @@
 import { createProtectedRouter } from "./context";
 import { z } from "zod";
-import { log } from "console";
+import { group, log } from "console";
 
-export const protectedPostsRouter = createProtectedRouter()
+export const protectedDraftsRouter = createProtectedRouter()
   .mutation("new", {
     async resolve({ ctx }) {
       return ctx.prisma.post.create({
@@ -19,16 +19,38 @@ export const protectedPostsRouter = createProtectedRouter()
       });
     },
   })
+  .query("getOpenDrafts", {
+    input: z.object({
+      userId: z.string().nullish(),
+    }),
+    async resolve({ ctx, input }) {
+      if (input.userId) {
+        return ctx.prisma.post.findMany({
+          where: {
+            isDraft: true,
+            user: {
+              id: input.userId,
+            },
+          },
+          select: {
+            id: true,
+            titleDraft: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        });
+      }
+    },
+  })
   .middleware(async ({ ctx, next, rawInput }) => {
+    console.group("middleware");
     if (
       typeof rawInput === "object" &&
-      !("postId" in rawInput) &&
-      typeof rawInput.postId === "string"
+      (!("postId" in rawInput) || typeof rawInput.postId !== "string")
     ) {
       throw new Error("No postId provided");
     }
     console.log(rawInput);
-
     const post = await ctx.prisma.post.findFirst({
       where: {
         user: {
@@ -44,17 +66,19 @@ export const protectedPostsRouter = createProtectedRouter()
     if (!post) {
       throw new Error("Post does not belong to user");
     }
+    console.log(post);
     if (!post.isDraft) {
       console.log("Post is not a draft");
-      const postData = await ctx.prisma.post.findFirst({
+      const postData = await ctx.prisma.post.findUnique({
         where: {
-          id: rawInput.postId,
+          id: String(rawInput.postId),
         },
         select: {
           title: true,
           article: true,
         },
       });
+      console.log(postData);
       await ctx.prisma.post.update({
         where: {
           id: post.id,
@@ -66,12 +90,7 @@ export const protectedPostsRouter = createProtectedRouter()
         },
       });
     }
-    // return next({
-    //   ctx: {
-    //     ...ctx,
-    //     postId: post.id,
-    //   },
-    // });
+    console.groupEnd();
     return next();
   })
   .query("getArticle", {
@@ -234,6 +253,9 @@ export const protectedPostsRouter = createProtectedRouter()
       postId: z.string(),
     }),
     async resolve({ ctx, input }) {
+      console.log("removeDraft");
+      console.log(input);
+
       await ctx.prisma.post.update({
         where: {
           id: input.postId,
@@ -284,29 +306,6 @@ export const protectedPostsRouter = createProtectedRouter()
         });
       } else {
         throw new Error("Unable to create a draft");
-      }
-    },
-  })
-  .query("getOpenDrafts", {
-    input: z.object({
-      userId: z.string().nullish(),
-    }),
-    async resolve({ ctx, input }) {
-      if (input.userId) {
-        return ctx.prisma.post.findMany({
-          where: {
-            isDraft: true,
-            user: {
-              id: input.userId,
-            },
-          },
-          select: {
-            id: true,
-            titleDraft: true,
-            createdAt: true,
-            updatedAt: true,
-          },
-        });
       }
     },
   })
