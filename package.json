@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "migrateInit": "prisma migrate dev --name init --preview-feature",
+    "push": "prisma db push"
   },
   "dependencies": {
     "@carbon/react": "^1.12.0",

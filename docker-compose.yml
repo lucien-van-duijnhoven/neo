@@ -3,7 +3,7 @@ version: "1"
 services:
   app:
     image: node:18-alpine
-    command: sh -c "yarn install && yarn run dev"
+    command: sh -c "yarn install && yarn run push && yarn run dev"
     ports:
       - 3000:3000
     working_dir: /app
@@ -14,6 +14,8 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: secret
       MYSQL_DB: neo
+    depends_on:
+      - mysql
   mysql:
     image: mysql:8.0
     volumes:
@@ -21,6 +23,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: neo
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
   s3:
     image: minio/minio:latest
     ports:
