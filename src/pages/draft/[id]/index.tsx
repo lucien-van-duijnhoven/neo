@@ -36,10 +36,10 @@ export default function Upload() {
   const router = useRouter();
   const { id } = router.query;
 
-  const { status } = trpc.useQuery([
-    "post.draft.HasDraft",
-    { postId: String(id) },
-  ]);
+  // const { status } = trpc.useQuery([
+  //   "post.draft.HasDraft",
+  //   { postId: String(id) },
+  // ]);
 
   const mutateSingedPutLinkConfig = trpc.useMutation(
     "post.bucket.getSignedGetLinkConfig"
@@ -73,7 +73,7 @@ export default function Upload() {
 
   // markdown sync start
   const [markdown, setMarkdown] = useState<string | null>(null);
-  trpc.useQuery(["post.draft.getArticle", { postId: String(id) }], {
+  const articleQuery = trpc.useQuery(["post.draft.getArticle", { postId: String(id) }], {
     enabled: markdown !== null ? false : true,
     onSuccess(data) {
       setMarkdown(data?.articleDraft ?? null);
@@ -218,11 +218,10 @@ export default function Upload() {
   }
   // Private end
 
-  if (status === "loading") {
+  const isLoading = isPublicQuery.isLoading || photos.isLoading || configUrl.isLoading || articleQuery.isLoading;
+
+  if (isLoading) {
     return <div>Loading...</div>;
-  }
-  if (status === "error") {
-    return <div>You do not have access to this page</div>;
   }
   return (
     <>

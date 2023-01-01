@@ -1,4 +1,4 @@
-# TODO: Bootsrap all with docker
+# TODO: Bootstrap all with docker
 version: "1"
 services:
   app:

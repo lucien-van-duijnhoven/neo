@@ -14,10 +14,10 @@ enum Buckets {
 
 const client = new minio.Client({
     endPoint: '127.0.0.1',
-    port: 9000,
+    port: 9001,
     useSSL: false,
-    accessKey: env.MINIO_ROOT_USER,
-    secretKey: env.MINIO_ROOT_PASSWORD
+    accessKey: env.MINIO_ASSESS_KEY,
+    secretKey: env.MINIO_SECRET_KEY
 })
 
 export const protectedMediaRouter = createProtectedRouter()
