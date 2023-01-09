@@ -1,19 +1,19 @@
 # TODO: Bootsrap all with docker
-version: "1"
+version: "3"
 services:
   app:
-    image: node:18-alpine
-    command: sh -c "yarn install && yarn run dev"
+    build: .
     ports:
       - 3000:3000
-    working_dir: /app
     volumes:
       - ./:/app
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_DB: neo
+      - /app/node_modules
+      - /app/.yarn
+    depends_on:
+      - mysql
+      - s3
+    env_file:
+      - ./.env
   mysql:
     image: mysql:8.0
     volumes:
