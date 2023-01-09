@@ -1,5 +1,6 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { NextApiRequestQuery } from "next/dist/server/api-utils";
+import { env } from "process";
 
 const minio = require('minio')
 
@@ -7,8 +8,8 @@ const client = new minio.Client({
   endPoint: '127.0.0.1',
   port: 9000,
   useSSL: false,
-  accessKey: 'testuser',
-  secretKey: 'testpassword'
+  accessKey: env.MINIO_ROOT_USER,
+  secretKey: env.MINIO_ROOT_PASSWORD
 })
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

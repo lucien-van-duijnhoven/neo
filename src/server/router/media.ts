@@ -3,6 +3,7 @@ import { z } from "zod";
 import { log } from "console";
 import { createNextApiHandler } from "@trpc/server/adapters/next";
 import { randomUUID } from "crypto";
+import { env } from "process";
 
 const minio = require('minio')
 
@@ -13,10 +14,10 @@ enum Buckets {
 
 const client = new minio.Client({
     endPoint: '127.0.0.1',
-    port: 9000,
+    port: 9001,
     useSSL: false,
-    accessKey: 'testuser',
-    secretKey: 'testpassword'
+    accessKey: env.MINIO_ASSESS_KEY,
+    secretKey: env.MINIO_SECRET_KEY
 })
 
 export const protectedMediaRouter = createProtectedRouter()
